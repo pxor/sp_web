@@ -45,6 +45,9 @@ nix shell nixpkgs#nodejs_22 nixpkgs#pnpm
 ## 🚀 Quick Start
 
 ```bash
+# navigate to the web folder
+cd web
+
 # install deps
 pnpm install
 
