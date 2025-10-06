@@ -1,0 +1,30 @@
+{
+    "nav.home": "Home",
+    "nav.results": "Results",
+    "nav.about": "About",
+    "nav.contact": "Contact",
+  
+    "hero.slogan": "Shape Your Balance",
+    "hero.tagline": "A calm, natural path to slimming that aligns energy and confidence, one session at a time.",
+    "hero.logoAlt": "Brand logo",
+  
+    "results.title": "Before & After",
+    "results.subtitle": "Real results from our clients.",
+    "results.case": "Case {n}",
+  
+    "about.title": "About",
+    "about.body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  
+    "contact.title": "Contact",
+    "contact.name.placeholder": "George Dimitrov",
+    "contact.email": "Your email",
+    "contact.email.placeholder": "you@example.com",
+    "contact.message": "Message",
+    "contact.message.placeholder": "How can we help?",
+    "contact.submit": "Send",
+    "contact.success": "Thanks! We’ll be in touch.",
+    "contact.error": "Could not send email. Please try again later.",
+  
+    "footer.copyright": " - 33a team"
+  }
+  

@@ -1,0 +1,52 @@
+# --- dependencies ---
+node_modules/
+.pnpm-store/
+.npm/
+.yarn/
+
+# --- sveltekit / vite build output ---
+.build/
+dist/
+.svelte-kit/
+.vite/
+vite.svg
+
+# --- serverless / hosts (optional, remove if unused) ---
+.vercel/
+.netlify/
+.output/
+
+# --- environment / secrets ---
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# --- logs & coverage ---
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+coverage/
+*.lcov
+
+# --- OS / editor junk ---
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/*~
+.history/
+
+# --- lock & cache (keep lockfiles tracked; don’t ignore them) ---
+# pnpm-lock.yaml  # <-- DO NOT ignore; commit your lockfile for reproducibility
+# package-lock.json
+# yarn.lock
+
+# --- nix / direnv (if you use them) ---
+.direnv/
+result
+.nix-*
