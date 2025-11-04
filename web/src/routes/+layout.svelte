@@ -46,9 +46,11 @@
 
 <header class="site-header" on:keydown={onKey}>
 	<div class="bar">
-		<button class="brand" on:click={() => scrollToId('home')} aria-label="Home">
-			<img src="/images/logo.png" alt="Home" width="120" height="32" class="brand-logo" decoding="async" />
-		</button>
+		{#if !isMobile}
+			<button class="brand" on:click={() => scrollToId('home')} aria-label="Home">
+				<img src="/images/logo2.png" alt="Home" width="120" height="64" class="brand-logo" decoding="async" />
+			</button>
+		{/if}
 
 		<nav class="nav desktop">
 			<button on:click={() => scrollToId('home')}>{$t('nav.home')}</button>
@@ -126,7 +128,8 @@
 
 	.brand-logo {
 		display: block;
-		height: 32px;
+		height: 50px;
+		position: absolute;
 		width: auto;
 		object-fit: contain;
 		user-select: none;

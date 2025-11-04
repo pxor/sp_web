@@ -20,15 +20,52 @@
 
 	export let form;
 
-	const cases = [
-		{ n: 1, before: '/images/before_demo.jpg', after: '/images/after_demo.jpg', label: 'Case 1' },
-		{ n: 2, before: '/images/before_demo.jpg', after: '/images/after_demo.jpg', label: 'Case 2' },
-		{ n: 3, before: '/images/before_demo.jpg', after: '/images/after_demo.jpg', label: 'Case 3' },
-		{ n: 4, before: '/images/before_demo.jpg', after: '/images/after_demo.jpg', label: 'Case 4' }
+	type TransformationCase = {
+		n: number;
+		image: string;
+		label: string;
+		summary: string;
+		stats: string[];
+	};
+
+	const cases: TransformationCase[] = [
+		{
+			n: 1,
+				image: '/images/1.png',
+			label: 'Leah, 22 lb lost',
+			summary: 'High-protein meals and 3x weekly strength sessions trimmed 22 lbs in 16 weeks.',
+				stats: ['Weight: 178 lb -> 156 lb', 'Body fat: 38% -> 29%', 'Waist: 36" -> 30"']
+		},
+		{
+			n: 2,
+				image: '/images/2.png',
+			label: 'Carmen, 9 kg lighter',
+			summary: 'Mediterranean-inspired nutrition plus mobility drills helped drop 9 kg sustainably.',
+				stats: ['Weight: 74 kg -> 65 kg', 'Energy: Afternoon crashes gone', 'Steps: 5k -> 10k daily']
+		},
+		{
+			n: 3,
+				image: '/images/3.png',
+			label: 'Aisha, 3 sizes down',
+			summary: 'Hybrid HIIT and Pilates rebuilt core strength while reshaping her silhouette.',
+				stats: ['Dress size: 12 -> 8', 'Midsection: -4"', 'Confidence: Speaking on-stage again']
+		},
+		{
+			n: 4,
+				image: '/images/4.png',
+			label: 'Julia, postpartum reset',
+			summary: 'Smart strength circuits and mindful recovery recharged her postpartum routine.',
+				stats: ['Weight: 162 lb -> 142 lb', 'Sleep: 5 hrs -> 7 hrs nightly', 'Weekly workouts: 0 -> 4']
+		}
 	];
 
-	const caseLabel = (n: number, base: string) =>
-		($t?.('results.case') || base).replace('{n}', String(n));
+	const caseLabel = (c: TransformationCase) => {
+		const template = $t?.('results.case');
+		if (template && template.includes('{n}')) {
+			return `${template.replace('{n}', String(c.n))} - ${c.label}`;
+		}
+		return c.label;
+	};
 </script>
 
 <section id="home" class="hero" bind:this={heroEl} aria-label={$t('nav.home')}>
@@ -39,23 +76,40 @@
 	</div>
 </section>
 
-<section id="before-after" class="section section-center">
+	<section id="before-after" class="section section-center">
 	<h2>{$t('results.title')}</h2>
 	<p class="muted">{$t('results.subtitle')}</p>
 
 	<div class="ba-grid">
-		{#each cases as c}
-			<article class="ba-card" aria-label={caseLabel(c.n, c.label)}>
-				<img class="ba-img before" src={c.before} alt={caseLabel(c.n, c.label) + ' — before'} />
+			{#each cases as c}
+				<article class="ba-card" aria-label={caseLabel(c)}>
+					<div
+						class="ba-img before"
+						role="img"
+						aria-label={caseLabel(c) + ' - before'}
+						style={`--img: url('${c.image}')`}
+					></div>
 
-				<div class="ba-text">
-					<div class="ba-title">{caseLabel(c.n, c.label)}</div>
-					<div class="ba-sub">{$t('results.subtitle')}</div>
-				</div>
+					<div class="ba-text">
+						<div class="ba-title">{c.label}</div>
+						<p class="ba-sub">{c.summary}</p>
+						{#if c.stats && c.stats.length}
+							<ul class="ba-stats">
+								{#each c.stats as stat}
+									<li>{stat}</li>
+								{/each}
+							</ul>
+						{/if}
+					</div>
 
-				<img class="ba-img after" src={c.after} alt={caseLabel(c.n, c.label) + ' — after'} />
-			</article>
-		{/each}
+					<div
+						class="ba-img after"
+						role="img"
+						aria-label={caseLabel(c) + ' - after'}
+						style={`--img: url('${c.image}')`}
+					></div>
+				</article>
+			{/each}
 	</div>
 </section>
 
@@ -110,11 +164,17 @@
         max-width: unset !important
     }
 
-	.section {
-		max-width: 1100px;
-		margin: 0 auto;
-		padding: 4rem 1rem;
-	}
+		.section {
+			max-width: 1100px;
+			margin: 0 auto;
+			padding: 4rem 1rem;
+		}
+		#before-after.section {
+			max-width: none;
+			width: 100%;
+			padding-left: clamp(1rem, 6vw, 5rem);
+			padding-right: clamp(1rem, 6vw, 5rem);
+		}
 	h2 {
 		margin: 0 0 0.75rem 0;
 		font-size: 2rem;
@@ -147,8 +207,8 @@
 		max-width: 900px;
 	}
 	.logo {
-		width: 120px;
-		height: 120px;
+		width: 240px;
+		height: 240px;
 		object-fit: contain;
 		margin-bottom: 1rem;
 	}
@@ -235,53 +295,85 @@
 	.ba-sub {
 		font-size: 0.9rem;
 		color: #666;
-	}
-	/* 2×2 grid on desktop, 1×4 stack on mobile */
-	.ba-grid {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 1rem;
-	}
-	@media (max-width: 900px) {
-		.ba-grid {
-			grid-template-columns: 1fr;
-		}
+		margin: 0;
+		line-height: 1.45;
 	}
 
-	/* Same markup, responsive layout via grid areas */
-	.ba-card {
-		border: 1px solid #eee;
-		border-radius: 12px;
-		background: #fafafa;
-		padding: 0.75rem;
-		display: grid;
-		gap: 0.75rem;
-
-		/* Desktop: image | text | image */
-		grid-template-columns: 1fr minmax(160px, 0.9fr) 1fr;
-		grid-template-areas: 'before text after';
-		align-items: center;
-	}
-
-	.ba-img {
-		width: 100%;
-		height: 220px;
-		object-fit: cover;
-		border-radius: 10px;
-	}
-	.ba-text {
-		grid-area: text;
+	.ba-stats {
+		list-style: none;
+		padding: 0;
+		margin: 0;
 		display: grid;
 		gap: 0.25rem;
-		text-align: center;
-		padding: 0.25rem 0.5rem;
+		font-size: 0.9rem;
+		color: #444;
 	}
-	.before {
-		grid-area: before;
+
+	.ba-stats li {
+		position: relative;
+		padding-left: 1.1rem;
 	}
-	.after {
-		grid-area: after;
+
+	.ba-stats li::before {
+		content: '-';
+		position: absolute;
+		left: 0;
+		color: #999;
 	}
+	/* Single column layout across viewports */
+		.ba-grid {
+			display: grid;
+			gap: 1.5rem;
+			margin: 0 auto;
+			width: min(100%, 1200px);
+			padding: 0;
+		}
+
+	/* Same markup, responsive layout via grid areas */
+		.ba-card {
+			border: 1px solid #eee;
+			border-radius: 12px;
+			background: #fafafa;
+			padding: 0.75rem;
+			display: grid;
+			gap: 0.75rem;
+
+			/* Desktop: image | text | image */
+			grid-template-columns: minmax(300px, 0.95fr) minmax(240px, 0.7fr) minmax(300px, 0.95fr);
+			grid-template-areas: 'before text after';
+			align-items: stretch;
+			max-width: min(1100px, 100%);
+			margin: 0 auto;
+		}
+
+		.ba-img {
+			width: 100%;
+			border-radius: 10px;
+			background-image: var(--img);
+			background-size: 200% 100%;
+			background-repeat: no-repeat;
+			background-position: center;
+			background-color: #e9e9e9;
+			aspect-ratio: 3 / 4;
+		}
+		.ba-text {
+			grid-area: text;
+			display: grid;
+			gap: 0.5rem;
+			text-align: center;
+			padding: 0.25rem 0.5rem;
+			align-content: center;
+			justify-items: center;
+			align-items: center;
+		}
+		.before {
+			grid-area: before;
+			background-position: left center;
+		}
+		.after {
+			grid-area: after;
+			background-position: right center;
+		}
 
 	/* Mobile: before → text → after (stacked) */
 	@media (max-width: 900px) {
@@ -291,9 +383,8 @@
 				'before'
 				'text'
 				'after';
+			max-width: min(520px, 100%);
+			margin: 0 auto;
 		}
-		.ba-img {
-			height: 200px;
-		} /* optional tighter height on phones */
 	}
 </style>
