@@ -5,7 +5,7 @@ import bg from './bg.json';
 export type Locale = 'en' | 'bg';
 export const messages: Record<Locale, Record<string, string>> = { en, bg };
 
-export const locale = writable<Locale>('en');
+export const locale = writable<Locale>('bg');
 
 export function setLocale(next: Locale) {
   if (next !== get(locale)) locale.set(next);

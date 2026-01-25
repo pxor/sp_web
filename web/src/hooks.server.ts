@@ -5,7 +5,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   if (lang === 'bg' || lang === 'en') {
     event.locals.lang = lang;
   } else {
-    event.locals.lang = 'en';
+    event.locals.lang = 'bg';
   }
 
   return resolve(event, {

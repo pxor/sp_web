@@ -25,11 +25,10 @@ export const actions: Actions = {
       return { success: true }; // pretend OK
     }
 
-    const name = String(data.get('name') ?? '').trim();
     const email = String(data.get('email') ?? '').trim();
     const message = String(data.get('message') ?? '').trim();
 
-    if (!name || !email || !message || !EMAIL_RE.test(email)) {
+    if (!email || !message || !EMAIL_RE.test(email)) {
       return { error: 'contact.error' }; // i18n key or plain message
     }
 
@@ -39,12 +38,11 @@ export const actions: Actions = {
       await t.sendMail({
         from: process.env.SMTP_FROM ?? process.env.SMTP_USER,        // must be your Gmail or verified alias
         to: process.env.SMTP_TO ?? 'nedislav@gmail.com',             // ensure this is your address
-        subject: `New contact: ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
-        html: `<p><strong>Name:</strong> ${name}</p>
-               <p><strong>Email:</strong> ${email}</p>
+        subject: `New contact: ${email}`,
+        text: `Email: ${email}\n\n${message}`,
+        html: `<p><strong>Email:</strong> ${email}</p>
                <p>${message.replace(/\n/g, '<br/>')}</p>`,
-        replyTo: `"${name}" <${email}>`
+        replyTo: email
       });
 
       return { success: true };

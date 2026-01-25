@@ -4,6 +4,10 @@
 
 	// background “sliding” effect: update CSS var based on scroll
 	let heroEl: HTMLElement | null = null;
+	let emailValue = '';
+	let emailTouched = false;
+	const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	$: emailInvalid = emailTouched && !EMAIL_RE.test(emailValue);
 
 	const onScroll = () => {
 		if (!heroEl) return;
@@ -31,31 +35,47 @@
 	const cases: TransformationCase[] = [
 		{
 			n: 1,
-				image: '/images/1.png',
-			label: 'Leah, 22 lb lost',
-			summary: 'High-protein meals and 3x weekly strength sessions trimmed 22 lbs in 16 weeks.',
-				stats: ['Weight: 178 lb -> 156 lb', 'Body fat: 38% -> 29%', 'Waist: 36" -> 30"']
+			image: '/images/1.png',
+			label: $t('results.cases.1.label'),
+			summary: $t('results.cases.1.summary'),
+			stats: [
+				$t('results.cases.1.stats.1'),
+				$t('results.cases.1.stats.2'),
+				$t('results.cases.1.stats.3')
+			]
 		},
 		{
 			n: 2,
-				image: '/images/2.png',
-			label: 'Carmen, 9 kg lighter',
-			summary: 'Mediterranean-inspired nutrition plus mobility drills helped drop 9 kg sustainably.',
-				stats: ['Weight: 74 kg -> 65 kg', 'Energy: Afternoon crashes gone', 'Steps: 5k -> 10k daily']
+			image: '/images/2.png',
+			label: $t('results.cases.2.label'),
+			summary: $t('results.cases.2.summary'),
+			stats: [
+				$t('results.cases.2.stats.1'),
+				$t('results.cases.2.stats.2'),
+				$t('results.cases.2.stats.3')
+			]
 		},
 		{
 			n: 3,
-				image: '/images/3.png',
-			label: 'Aisha, 3 sizes down',
-			summary: 'Hybrid HIIT and Pilates rebuilt core strength while reshaping her silhouette.',
-				stats: ['Dress size: 12 -> 8', 'Midsection: -4"', 'Confidence: Speaking on-stage again']
+			image: '/images/3.png',
+			label: $t('results.cases.3.label'),
+			summary: $t('results.cases.3.summary'),
+			stats: [
+				$t('results.cases.3.stats.1'),
+				$t('results.cases.3.stats.2'),
+				$t('results.cases.3.stats.3')
+			]
 		},
 		{
 			n: 4,
-				image: '/images/4.png',
-			label: 'Julia, postpartum reset',
-			summary: 'Smart strength circuits and mindful recovery recharged her postpartum routine.',
-				stats: ['Weight: 162 lb -> 142 lb', 'Sleep: 5 hrs -> 7 hrs nightly', 'Weekly workouts: 0 -> 4']
+			image: '/images/4.png',
+			label: $t('results.cases.4.label'),
+			summary: $t('results.cases.4.summary'),
+			stats: [
+				$t('results.cases.4.stats.1'),
+				$t('results.cases.4.stats.2'),
+				$t('results.cases.4.stats.3')
+			]
 		}
 	];
 
@@ -124,13 +144,21 @@
   
     <form method="POST" action="?/contact" class="contact">
       <label>
-        {$t('contact.name') /* or "Your name" */}
-        <input name="name" type="text" required placeholder={$t('contact.name.placeholder') || 'Your name'} />
-      </label>
-  
-      <label>
         {$t('contact.email') /* or "Your email" */}
-        <input name="email" type="email" required placeholder={$t('contact.email.placeholder') || 'you@example.com'} />
+        {#if emailInvalid}
+          <span class="field-error">{$t('contact.email.invalid') || 'Invalid email!'}</span>
+        {/if}
+        <input
+          name="email"
+          type="email"
+          required
+          pattern="^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+          title="Please enter a valid email address."
+          placeholder={$t('contact.email.placeholder') || 'you@example.com'}
+          class:input-error={emailInvalid}
+          bind:value={emailValue}
+          on:input={() => (emailTouched = true)}
+        />
       </label>
   
       <label>
@@ -139,7 +167,7 @@
       </label>
   
       <!-- (optional) honeypot for bots -->
-      <input type="text" name="company" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" />
+      <input type="text" name="company" tabindex="-1" autocomplete="off" class="honeypot" />
   
       <button type="submit">{$t('contact.submit') || 'Send'}</button>
   
@@ -150,6 +178,16 @@
       {/if}
     </form>
   </section>
+
+<section id="map" class="section section-center">
+	<iframe
+		title="Google Maps - ул. Опълченска 22"
+		class="map-embed"
+		loading="lazy"
+		referrerpolicy="no-referrer-when-downgrade"
+		src="https://www.google.com/maps?q=%D1%83%D0%BB.%20%D0%9E%D0%BF%D1%8A%D0%BB%D1%87%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%2022&output=embed"
+	></iframe>
+</section>
 
 <footer class="footer">
 	<p>&copy; {new Date().getFullYear()} {$t('footer.copyright')}</p>
@@ -164,23 +202,33 @@
         max-width: unset !important
     }
 
-		.section {
-			max-width: 1100px;
-			margin: 0 auto;
-			padding: 4rem 1rem;
-		}
-		#before-after.section {
-			max-width: none;
-			width: 100%;
-			padding-left: clamp(1rem, 6vw, 5rem);
-			padding-right: clamp(1rem, 6vw, 5rem);
-		}
+	.section {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 4rem 1rem;
+		box-sizing: border-box;
+	}
+	.section-center h2 {
+		text-align: center;
+	}
+	.section-center .muted {
+		text-align: center;
+	}
+	#before-after.section {
+		max-width: none;
+		width: 100%;
+		padding-left: clamp(1rem, 6vw, 5rem);
+		padding-right: clamp(1rem, 6vw, 5rem);
+		box-sizing: border-box;
+	}
 	h2 {
 		margin: 0 0 0.75rem 0;
 		font-size: 2rem;
 	}
 	.muted {
-		color: #666;
+		color: #111;
+		font-size: 1rem;
+		line-height: 1.6;
 		margin: 0 0 1.5rem 0;
 	}
 
@@ -197,7 +245,7 @@
 		/* Replace with your background image */
 		background-image:
 			linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-			url('/images/bg_primary.jpg');
+			url('/images/background.gif');
 		background-size: cover;
 		background-repeat: no-repeat;
 		/* Slide with scroll: we shift background-position Y via CSS var */
@@ -262,6 +310,26 @@
 		border: 1px solid #ddd;
 		border-radius: 10px;
 	}
+	.input-error {
+		border-color: #b00020;
+		box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.08);
+	}
+	.field-error {
+		color: #b00020;
+		font-size: 0.9rem;
+		font-weight: 600;
+	}
+	.honeypot {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+		border: 0;
+	}
 	button {
 		justify-self: start;
 		padding: 0.6rem 1rem;
@@ -284,6 +352,14 @@
 		color: #777;
 		border-top: 1px solid #eee;
 		margin-top: 3rem;
+	}
+
+	.map-embed {
+		width: 100%;
+		height: min(60vh, 520px);
+		border: 0;
+		border-radius: 16px;
+		box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 	}
 
 	.ba-title {

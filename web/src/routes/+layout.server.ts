@@ -7,7 +7,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 export const actions: Actions = {
   setLang: async ({ request, cookies }) => {
     const data = await request.formData();
-    const lang = String(data.get('lang') ?? 'en');
+    const lang = String(data.get('lang') ?? 'bg');
     if (lang === 'en' || lang === 'bg') {
       cookies.set('lang', lang, { path: '/', httpOnly: false, sameSite: 'lax', maxAge: 60 * 60 * 24 * 365 });
       return { ok: true };

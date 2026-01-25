@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { locale, setLocale, t } from '$lib/text';
+	import { page } from '$app/stores';
 	export let data: App.PageData;
 	import { onMount } from 'svelte';
 
@@ -43,6 +44,41 @@
 		if (e.key === 'Escape') open = false;
 	}
 </script>
+
+<svelte:head>
+	<title>{$t('seo.title')}</title>
+	<meta name="description" content={$t('seo.description')} />
+	<meta name="robots" content="index,follow" />
+	<link rel="canonical" href={`${$page.url.origin}${$page.url.pathname}`} />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content={$t('seo.siteName')} />
+	<meta property="og:title" content={$t('seo.title')} />
+	<meta property="og:description" content={$t('seo.description')} />
+	<meta property="og:url" content={`${$page.url.origin}${$page.url.pathname}`} />
+	<meta
+		property="og:image"
+		content={new URL('/images/bg_primary.jpg', $page.url).href}
+	/>
+	<meta property="og:locale" content={$locale === 'bg' ? 'bg_BG' : 'en_US'} />
+	<meta property="og:locale:alternate" content={$locale === 'bg' ? 'en_US' : 'bg_BG'} />
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={$t('seo.title')} />
+	<meta name="twitter:description" content={$t('seo.description')} />
+	<meta name="twitter:image" content={new URL('/images/bg_primary.jpg', $page.url).href} />
+
+	<script type="application/ld+json">
+		{@html JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'Organization',
+			name: $t('seo.siteName'),
+			url: `${$page.url.origin}${$page.url.pathname}`,
+			description: $t('seo.description'),
+			logo: new URL('/images/logo.png', $page.url).href
+		})}
+	</script>
+</svelte:head>
 
 <header class="site-header" on:keydown={onKey}>
 	<div class="bar">
