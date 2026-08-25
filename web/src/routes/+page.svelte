@@ -22,7 +22,31 @@
 		return () => window.removeEventListener('scroll', onScroll);
 	});
 
-	export let form;
+	let formStatus: 'idle' | 'sending' | 'success' | 'error' = 'idle';
+
+	async function handleContactSubmit(e: SubmitEvent) {
+		const target = e.target as HTMLFormElement;
+		const data = new FormData(target);
+		// honeypot — silently ignore bot submissions
+		if ((data.get('company') as string)?.trim()) {
+			formStatus = 'success';
+			return;
+		}
+		formStatus = 'sending';
+		try {
+			// Web3Forms: sign up at https://web3forms.com and replace the access_key below
+			data.set('access_key', 'YOUR_WEB3FORMS_ACCESS_KEY');
+			const res = await fetch('https://api.web3forms.com/submit', {
+				method: 'POST',
+				body: data
+			});
+			const json = await res.json();
+			formStatus = json.success ? 'success' : 'error';
+			if (formStatus === 'success') target.reset();
+		} catch {
+			formStatus = 'error';
+		}
+	}
 
 	type TransformationCase = {
 		n: number;
@@ -142,9 +166,9 @@
 <section id="contact" class="section section-center">
     <h2>{$t('contact.title')}</h2>
   
-    <form method="POST" action="?/contact" class="contact">
+    <form class="contact" on:submit|preventDefault={handleContactSubmit}>
       <label>
-        {$t('contact.email') /* or "Your email" */}
+        {$t('contact.email')}
         {#if emailInvalid}
           <span class="field-error">{$t('contact.email.invalid') || 'Invalid email!'}</span>
         {/if}
@@ -160,21 +184,23 @@
           on:input={() => (emailTouched = true)}
         />
       </label>
-  
+
       <label>
-        {$t('contact.message') /* or "Message" */}
+        {$t('contact.message')}
         <textarea name="message" rows="5" required placeholder={$t('contact.message.placeholder') || 'How can we help?'}></textarea>
       </label>
-  
-      <!-- (optional) honeypot for bots -->
+
+      <!-- honeypot for bots -->
       <input type="text" name="company" tabindex="-1" autocomplete="off" class="honeypot" />
-  
-      <button type="submit">{$t('contact.submit') || 'Send'}</button>
-  
-      {#if form?.success}
-        <p class="success">{$t('contact.success') || 'Thanks! We’ll be in touch.'}</p>
-      {:else if form?.error}
-        <p class="error">{$t(form.error) || form.error}</p>
+
+      <button type="submit" disabled={formStatus === 'sending'}>
+        {formStatus === 'sending' ? '...' : ($t('contact.submit') || 'Send')}
+      </button>
+
+      {#if formStatus === 'success'}
+        <p class="success">{$t('contact.success') || "Thanks! We'll be in touch."}</p>
+      {:else if formStatus === 'error'}
+        <p class="error">{$t('contact.error') || 'Something went wrong. Please try again.'}</p>
       {/if}
     </form>
   </section>

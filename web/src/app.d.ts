@@ -8,14 +8,6 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
-	declare global {
-		namespace App {
-		  interface Locals { lang: 'en' | 'bg'; }
-		  interface PageData { lang: 'en' | 'bg'; }
-		}
-	  }
-	  export {};
-	  
 }
 
 export {};

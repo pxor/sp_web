@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { locale, setLocale, t } from '$lib/text';
 	import { page } from '$app/stores';
-	export let data: App.PageData;
 	import { onMount } from 'svelte';
 
 	let open = false;
@@ -11,28 +10,27 @@
 	let mql: MediaQueryList;
 
 	onMount(() => {
+		// Restore saved language preference from localStorage
+		const saved = localStorage.getItem('lang') as 'en' | 'bg' | null;
+		if (saved === 'en' || saved === 'bg') {
+			setLocale(saved);
+			document.documentElement.lang = saved;
+		}
+
 		mql = window.matchMedia(MQ);
 		const update = () => {
 			isMobile = mql.matches;
 			if (!isMobile) open = false;
 		};
 		update();
-
 		mql.addEventListener('change', update);
 		return () => mql.removeEventListener('change', update);
 	});
 
-	$: if (data?.lang) {
-		setLocale(data.lang);
-		if (typeof document !== 'undefined') document.documentElement.lang = data.lang;
-	}
-
-	async function changeLang(next: 'en' | 'bg') {
+	function changeLang(next: 'en' | 'bg') {
 		setLocale(next);
 		document.documentElement.lang = next;
-		const form = new FormData();
-		form.set('lang', next);
-		await fetch('?/setLang', { method: 'POST', body: form });
+		localStorage.setItem('lang', next);
 	}
 
 	function scrollToId(id: string) {
