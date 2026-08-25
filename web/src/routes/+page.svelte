@@ -160,12 +160,18 @@
 <!-- make other section headers centered, too -->
 <section id="about" class="section section-center">
 	<h2>{$t('about.title')}</h2>
-	<p>{$t('about.body')}</p>
+	<p>{$t('about.body1')}</p>
+	<p>{$t('about.body2')}</p>
 </section>
 
 <section id="contact" class="section section-center">
     <h2>{$t('contact.title')}</h2>
-  
+
+    <div class="phone-cta">
+      <span>{$t('contact.phone.label')}</span>
+      <a href="tel:0887647148" class="phone-link">0887647148</a>
+    </div>
+
     <form class="contact" on:submit|preventDefault={handleContactSubmit}>
       <label>
         {$t('contact.email')}
@@ -318,6 +324,31 @@
 		font-weight: 600;
 	}
 
+	.phone-cta {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		justify-content: center;
+		margin-bottom: 2rem;
+		font-size: 1.05rem;
+	}
+	.phone-cta span {
+		color: #555;
+	}
+	.phone-link {
+		font-weight: 700;
+		font-size: 1.2rem;
+		color: #111;
+		text-decoration: none;
+		border-bottom: 2px solid #111;
+		padding-bottom: 1px;
+		letter-spacing: 0.02em;
+	}
+	.phone-link:hover {
+		color: #444;
+		border-color: #444;
+	}
+
 	/* Contact form */
 	.contact {
 		display: grid;
@@ -452,7 +483,7 @@
 			width: 100%;
 			border-radius: 10px;
 			background-image: var(--img);
-			background-size: cover;
+			background-size: 200% auto;
 			background-repeat: no-repeat;
 			background-position: center;
 			background-color: #e9e9e9;
