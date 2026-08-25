@@ -207,11 +207,11 @@
 
 <section id="map" class="section section-center">
 	<iframe
-		title="Google Maps - ул. Опълченска 22"
+		title="Google Maps - ул. Солунска 47"
 		class="map-embed"
 		loading="lazy"
 		referrerpolicy="no-referrer-when-downgrade"
-		src="https://www.google.com/maps?q=%D1%83%D0%BB.%20%D0%9E%D0%BF%D1%8A%D0%BB%D1%87%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%2022&output=embed"
+		src="https://www.google.com/maps?q=%D1%83%D0%BB.+%D0%A1%D0%BE%D0%BB%D1%83%D0%BD%D1%81%D0%BA%D0%B0+47%2C+%D0%A1%D0%BE%D1%84%D0%B8%D1%8F&output=embed"
 	></iframe>
 </section>
 
@@ -452,7 +452,7 @@
 			width: 100%;
 			border-radius: 10px;
 			background-image: var(--img);
-			background-size: 200% 100%;
+			background-size: cover;
 			background-repeat: no-repeat;
 			background-position: center;
 			background-color: #e9e9e9;
